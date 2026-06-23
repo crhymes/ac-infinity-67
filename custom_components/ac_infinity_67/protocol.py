@@ -18,6 +18,8 @@ SPEED_REPLAY_PREFIX = bytes.fromhex("a5 00 00 03 00 11 f7 79")
 class Telemetry:
     """Parsed recurring telemetry notification."""
 
+    temperature_c: float | None
+    raw_temperature: int | None
     speed: int | None
     raw_speed_byte: int | None
 
@@ -64,8 +66,15 @@ def parse_telemetry(data: bytes | bytearray) -> Telemetry | None:
     if len(value) != 18 or value[:8] != b"\x1e\xff\x02\x09\x03\x0c\x00\x00":
         return None
 
+    raw_temperature = int.from_bytes(value[8:10], "big")
+    temperature_c = None if raw_temperature == 0x8000 else raw_temperature / 100
     raw_speed = value[-1]
     high_nibble = raw_speed >> 4
     low_nibble = raw_speed & 0x0F
     speed = high_nibble if low_nibble == 0x02 and high_nibble in SPEED_RANGE else None
-    return Telemetry(speed=speed, raw_speed_byte=raw_speed)
+    return Telemetry(
+        temperature_c=temperature_c,
+        raw_temperature=raw_temperature,
+        speed=speed,
+        raw_speed_byte=raw_speed,
+    )

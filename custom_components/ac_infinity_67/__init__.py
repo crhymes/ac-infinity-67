@@ -9,7 +9,7 @@ from homeassistant.core import HomeAssistant
 from .client import ACInfinity67Client
 from .const import CONF_ADDRESS, DOMAIN
 
-PLATFORMS = [Platform.FAN]
+PLATFORMS = [Platform.FAN, Platform.SENSOR]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

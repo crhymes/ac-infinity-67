@@ -36,6 +36,8 @@ class ACInfinity67Client:
     def __init__(self, hass: HomeAssistant, address: str) -> None:
         self.hass = hass
         self.address = address.upper()
+        self.temperature_c: float | None = None
+        self.raw_temperature: int | None = None
         self.speed: int | None = None
         self.raw_speed_byte: int | None = None
         self.available = False
@@ -161,6 +163,8 @@ class ACInfinity67Client:
             "last_connect_success": self.last_connect_success,
             "last_device_source": self.last_device_source,
             "last_error": self.last_error,
+            "temperature_c": self.temperature_c,
+            "raw_temperature": self.raw_temperature,
             "speed": self.speed,
             "raw_speed_byte": self.raw_speed_byte,
         }
@@ -174,6 +178,9 @@ class ACInfinity67Client:
         self._apply_telemetry(telemetry)
 
     def _apply_telemetry(self, telemetry: Telemetry) -> None:
+        self.raw_temperature = telemetry.raw_temperature
+        if telemetry.temperature_c is not None:
+            self.temperature_c = telemetry.temperature_c
         self.raw_speed_byte = telemetry.raw_speed_byte
         if telemetry.speed is not None:
             self.speed = telemetry.speed

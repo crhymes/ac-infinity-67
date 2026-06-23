@@ -3,9 +3,9 @@
 Experimental Home Assistant custom integration for the BLE-only AC Infinity
 Controller 67.
 
-This integration exposes the controller as a Home Assistant `FanEntity` with
-speed control from off through speed 10. It is intended for local control over
-Bluetooth or an active ESPHome Bluetooth proxy.
+This integration exposes fan control from off through speed 10 and the
+controller probe temperature. It is intended for local control and telemetry
+over Bluetooth or an active ESPHome Bluetooth proxy.
 
 ## Status
 
@@ -21,6 +21,7 @@ control for anything safety-critical.
 - Manual config flow by controller BLE address
 - Bluetooth discovery by `BLE_FAN` local name where available
 - Fan percentage control in 10% steps
+- Temperature sensor from the controller probe
 - Home Assistant diagnostics for connection troubleshooting
 - HACS custom repository metadata
 
@@ -161,6 +162,7 @@ payload redacts the configured BLE address and includes:
 - whether the device came from Home Assistant Bluetooth discovery or direct
   Bleak scan
 - last BLE error
+- current decoded temperature and raw temperature value
 - current decoded speed and raw speed byte
 
 ## Notes
