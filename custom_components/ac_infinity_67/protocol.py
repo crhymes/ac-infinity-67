@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from decimal import Decimal, ROUND_HALF_UP
 
 
 CONTROL_CHARACTERISTIC_UUID = "70d51001-2c7f-4e75-ae8a-d758951ce4e0"
@@ -39,6 +40,11 @@ def crc16_ccitt_false(data: bytes) -> int:
 def speed_to_percentage(speed: int) -> int:
     validate_speed(speed)
     return speed * 10
+
+
+def temperature_to_tenth(temperature_c: float) -> float:
+    """Round a Celsius value to the nearest tenth, with halves rounded up."""
+    return float(Decimal(str(temperature_c)).quantize(Decimal("0.1"), ROUND_HALF_UP))
 
 
 def percentage_to_speed(percentage: int | float | None) -> int:

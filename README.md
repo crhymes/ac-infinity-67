@@ -22,6 +22,7 @@ control for anything safety-critical.
 - Bluetooth discovery by `BLE_FAN` local name where available
 - Fan percentage control in 10% steps
 - Temperature sensor from the controller probe
+- Temperature state updates rounded to `0.1 °C` to reduce recorder noise
 - Home Assistant diagnostics for connection troubleshooting
 - HACS custom repository metadata
 

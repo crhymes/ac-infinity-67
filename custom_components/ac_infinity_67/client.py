@@ -23,6 +23,7 @@ from .protocol import (
     Telemetry,
     parse_telemetry,
     speed_frame,
+    temperature_to_tenth,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -178,14 +179,20 @@ class ACInfinity67Client:
         self._apply_telemetry(telemetry)
 
     def _apply_telemetry(self, telemetry: Telemetry) -> None:
+        state_changed = not self.available
         self.raw_temperature = telemetry.raw_temperature
         if telemetry.temperature_c is not None:
-            self.temperature_c = telemetry.temperature_c
+            temperature_c = temperature_to_tenth(telemetry.temperature_c)
+            if temperature_c != self.temperature_c:
+                self.temperature_c = temperature_c
+                state_changed = True
         self.raw_speed_byte = telemetry.raw_speed_byte
-        if telemetry.speed is not None:
+        if telemetry.speed is not None and telemetry.speed != self.speed:
             self.speed = telemetry.speed
+            state_changed = True
         self.available = True
-        self._notify_state()
+        if state_changed:
+            self._notify_state()
 
     def _notify_state(self) -> None:
         for callback in list(self._callbacks):
