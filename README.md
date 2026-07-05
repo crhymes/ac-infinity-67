@@ -169,3 +169,7 @@ payload redacts the configured BLE address and includes:
 ## Notes
 
 This project is not affiliated with or endorsed by AC Infinity.
+
+## License
+
+MIT License. See [LICENSE](LICENSE).
